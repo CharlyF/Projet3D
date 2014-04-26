@@ -13,6 +13,7 @@
 #include <QImage>
 
 #include "Vec3D.h"
+#include "Triangle.h"
 
 class RayTracer {
 public:

@@ -62,22 +62,34 @@ QImage RayTracer::render (const Vec3Df & camPos,
             Vec3Df intersectionPoint;
             float smallestIntersectionDistance = 1000000.f;
             Vec3Df c (backgroundColor);
-            for (unsigned int k = 0; k < scene->getObjects().size (); k++) {
+            for (unsigned int k = 0; k < scene->getObjects().size(); k++) {
                 const Object & o = scene->getObjects()[k];
-                Ray ray (camPos-o.getTrans (), dir);
-                bool hasIntersection = ray.intersect (o.getBoundingBox (),
-                                                      intersectionPoint);
-                if (hasIntersection) {
-                    float intersectionDistance = Vec3Df::squaredDistance (intersectionPoint + o.getTrans (),
-                                                                          camPos);
-                    if (intersectionDistance < smallestIntersectionDistance) {
-                        c = 255.f * ((intersectionPoint - minBb) / rangeBb);
-                        smallestIntersectionDistance = intersectionDistance;
+                Ray ray (camPos-o.getTrans(), dir);
+                if (ray.intersect(o.getBoundingBox(), intersectionPoint)){
+                    std::vector<Vertex> Vertices = o.getMesh().getVertices();
+                    std::vector<Triangle> triangles = o.getMesh().getTriangles();
+                    for (unsigned int l = 0; l< triangles.size();l++){
+                        Triangle t = triangles[l];
+                        Vec3Df p0 = Vertices[t.getVertex(0)].getPos();
+                        Vec3Df p1 = Vertices[t.getVertex(1)].getPos();
+                        Vec3Df p2 = Vertices[t.getVertex(2)].getPos();
+                        bool Intersection = ray.intersectTriangle(t , intersectionPoint, p0, p1, p2);//Vertices) ;
+                        if (Intersection) {
+                            float intersectionDistance = Vec3Df::squaredDistance ( intersectionPoint + o.getTrans (),
+                                                                                  camPos);
+                            if (intersectionDistance < smallestIntersectionDistance) {
+                                c = 255.f * (intersectionPoint);
+                                smallestIntersectionDistance = intersectionDistance;
+                            }
+                        }
                     }
                 }
+
             }
             image.setPixel (i, j, qRgb (clamp (c[0], 0, 255), clamp (c[1], 0, 255), clamp (c[2], 0, 255)));
+
         }
+
     }
     progressDialog.setValue (100);
     return image;

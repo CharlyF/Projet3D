@@ -13,6 +13,8 @@
 
 #include "Vec3D.h"
 #include "BoundingBox.h"
+#include "Triangle.h"
+#include "Vertex.h"
 
 class Ray {
 public:
@@ -26,8 +28,8 @@ public:
     inline const Vec3Df & getDirection () const { return direction; }
     inline Vec3Df & getDirection () { return direction; }
 
-    bool intersect (const BoundingBox & bbox, Vec3Df & intersectionPoint) const;
-    
+    bool intersect (const BoundingBox & bbox, Vec3Df &intersectionPoint) const;
+    bool intersectTriangle (const Triangle t, Vec3Df &intersectionPoint, Vec3Df p0, Vec3Df p1, Vec3Df p2) const ;//std::vector<Vertex> & Vertices) const;
 private:
     Vec3Df origin;
     Vec3Df direction;

@@ -60,13 +60,13 @@ void Scene::buildDefaultScene () {
     Material rhinoMat (1.0f, 0.2f, Vec3Df (0.6f, 0.6f, 0.7f));
     Object rhino (rhinoMesh, rhinoMat);
     rhino.setTrans (Vec3Df (-1.f, -1.0f, 0.4f));
-    objects.push_back (rhino);
+    //objects.push_back (rhino);
     Mesh gargMesh;
     gargMesh.loadOFF ("models/gargoyle.off");
     Material gargMat (0.7f, 0.4f, Vec3Df (0.5f, 0.8f, 0.5f));
     Object garg (gargMesh, gargMat);
     garg.setTrans (Vec3Df (-1.f, 1.0f, 0.1f));
-    objects.push_back (garg);
+    //objects.push_back (garg);
     Light l (Vec3Df (3.0f, 3.0f, 3.0f), Vec3Df (1.0f, 1.0f, 1.0f), 1.0f);
     lights.push_back (l);
 }
