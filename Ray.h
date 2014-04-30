@@ -29,7 +29,8 @@ public:
     inline Vec3Df & getDirection () { return direction; }
 
     bool intersect (const BoundingBox & bbox, Vec3Df &intersectionPoint) const;
-    bool intersectTriangle (const Triangle t, Vec3Df &intersectionPoint, Vec3Df p0, Vec3Df p1, Vec3Df p2) const ;//std::vector<Vertex> & Vertices) const;
+    float intersectTriangle (const Triangle t, Vec3Df &intersectionPoint, Vec3Df p0, Vec3Df p1, Vec3Df p2, float diffuse, float specular,  Vec3Df n0, Vec3Df n1, Vec3Df n2, Vec3Df lightpos) const ;//std::vector<Vertex> & Vertices) const;
+  /// float brdfPhong (const Triangle t, Vec3Df & intersectionPoint, Vec3Df p0, Vec3Df p1, Vec3Df p2, float diffuse) const;
 private:
     Vec3Df origin;
     Vec3Df direction;

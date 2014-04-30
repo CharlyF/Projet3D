@@ -49,6 +49,7 @@ QImage RayTracer::render (const Vec3Df & camPos,
     const Vec3Df rangeBb = maxBb - minBb;
     QProgressDialog progressDialog ("Raytracing...", "Cancel", 0, 100);
     progressDialog.show ();
+
     for (unsigned int i = 0; i < screenWidth; i++) {
         progressDialog.setValue ((100*i)/screenWidth);
         for (unsigned int j = 0; j < screenHeight; j++) {
@@ -68,18 +69,30 @@ QImage RayTracer::render (const Vec3Df & camPos,
                 if (ray.intersect(o.getBoundingBox(), intersectionPoint)){
                     std::vector<Vertex> Vertices = o.getMesh().getVertices();
                     std::vector<Triangle> triangles = o.getMesh().getTriangles();
+
                     for (unsigned int l = 0; l< triangles.size();l++){
                         Triangle t = triangles[l];
                         Vec3Df p0 = Vertices[t.getVertex(0)].getPos();
                         Vec3Df p1 = Vertices[t.getVertex(1)].getPos();
                         Vec3Df p2 = Vertices[t.getVertex(2)].getPos();
-                        bool Intersection = ray.intersectTriangle(t , intersectionPoint, p0, p1, p2);//Vertices) ;
-                        if (Intersection) {
-                            float intersectionDistance = Vec3Df::squaredDistance ( intersectionPoint + o.getTrans (),
-                                                                                  camPos);
+                        Vec3Df n0 = Vertices[t.getVertex(0)].getNormal();
+                        Vec3Df n1 = Vertices[t.getVertex(1)].getNormal();
+                        Vec3Df n2 = Vertices[t.getVertex(2)].getNormal();
+                        Vec3Df lightpos = scene->getLights()[0].getPos();
+                        float diffuse = o.getMaterial().getDiffuse();
+                        float specular = o.getMaterial().getSpecular();
+                        float Intersection = ray.intersectTriangle(t , intersectionPoint, p0, p1, p2, diffuse,specular, n0, n1, n2, lightpos);//Vertices) ;
+
+                        if (Intersection!=1000) {
+                            //float f = ray.brdfPhong(t ,intersectionPoint,p0, p1, p2, diffuse);
+                           float intersectionDistance = Vec3Df::squaredDistance ( intersectionPoint + o.getTrans (),
+                                                                           camPos);
                             if (intersectionDistance < smallestIntersectionDistance) {
-                                c = 255.f * (intersectionPoint);
+                                //Vec3Df tmp (1,1,1);
+                                c = Intersection * o.getMaterial().getColor() * 255.f;
+                                //c = Vec3Df(Intersection, Intersection, Intersection);
                                 smallestIntersectionDistance = intersectionDistance;
+                                //std::cout << Intersection << std::endl;
                             }
                         }
                     }
@@ -91,6 +104,7 @@ QImage RayTracer::render (const Vec3Df & camPos,
         }
 
     }
+
     progressDialog.setValue (100);
     return image;
 }

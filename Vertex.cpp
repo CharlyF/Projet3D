@@ -50,6 +50,11 @@ void Vertex::scaleToUnitBox (vector<Vertex> & vertices,
     for (unsigned int i = 0; i < vertices.size (); i++) 
         vertices[i].setPos (Vec3Df::segment (center, vertices[i].getPos ()) / scaleToUnit);
 }
+//struct KDTree::kdtree (Voxel V, Rayon r){
+   // if (V.feuille){
+     //   return smallestIntersection
+   // }
+//}
 
 void Vertex::normalizeNormals (vector<Vertex> & vertices) {
     for (std::vector<Vertex>::iterator it = vertices.begin (); 

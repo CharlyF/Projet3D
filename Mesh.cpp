@@ -23,6 +23,7 @@ void Mesh::clearGeometry () {
     vertices.clear ();
 }
 
+
 void Mesh::clearTopology () {
     triangles.clear ();
 }
