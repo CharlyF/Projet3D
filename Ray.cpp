@@ -59,11 +59,10 @@ bool Ray::intersect (const BoundingBox & bbox, Vec3Df & intersectionPoint) const
         } else {
             intersectionPoint[i] = candidatePlane[i];
         }
-    return (true);			
+    return (true);
 }
 
 bool Ray::intersectTriangle (Vec3Df & intersectionPoint, Vec3Df p0, Vec3Df p1, Vec3Df p2, float & b0, float & b1, float & b2) const {
-
     Vec3Df e0 = p1-p0;
     Vec3Df e1 = p2-p0;
     Vec3Df n = Vec3Df::crossProduct(e0,e1);
@@ -71,17 +70,17 @@ bool Ray::intersectTriangle (Vec3Df & intersectionPoint, Vec3Df p0, Vec3Df p1, V
     Vec3Df q = Vec3Df::crossProduct(direction, e1);
     float a = Vec3Df::dotProduct(e0, q);
     if (Vec3Df::dotProduct(n,direction)>=0 || abs(a)<0.0 ){
-            return false;
+        return false;
     }
     Vec3Df s = (origin - p0)/a;
-   Vec3Df r = Vec3Df::crossProduct(s, e0);
-   b0 = Vec3Df::dotProduct(s,q);
-   b1 =Vec3Df::dotProduct(r,direction);
-   b2 = 1-b0-b1;
+    Vec3Df r = Vec3Df::crossProduct(s, e0);
+    b0 = Vec3Df::dotProduct(s,q);
+    b1 =Vec3Df::dotProduct(r,direction);
+    b2 = 1-b0-b1;
     if (b0<0 || b1<0 || b2<0){
         return false;
     }
-   float k = Vec3Df::dotProduct(r,e1);
+    float k = Vec3Df::dotProduct(r,e1);
     if (k>=0) {
         intersectionPoint = b2*p0+b0*p1+b1*p2;
         return true;
@@ -98,3 +97,7 @@ float Ray::brdfPhong (Vec3Df intersectionPoint, Vec3Df n0, Vec3Df n1, Vec3Df n2,
     float f = diffuse*(max(Vec3Df::dotProduct(norm, wi),0.f))+pow(specular*(max(Vec3Df::dotProduct(ri,-direction),0.f)),10);
     return f;
 }
+
+//float Ray::Mirror (Vec3Df intersectionPoint, Vec3Df camPos, const BoundingBox & bbox){
+
+//}
